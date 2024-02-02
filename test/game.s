@@ -5,11 +5,10 @@
 
 .section .rodata	                        # read only data section
     str: .string "Guess a number between 0 and 9:\n"
-    computer_print_format: .string "Computer number is: %d\n"
     user_print_format: .string "User number is %d\n"
     time_print_format: .string "Time is: %d\n"
     numbers_are_equal_message: .string "Numbers are equal\n"
-    numbers_are_not_equal_message: .string "Numbers are not equal\n"
+    numbers_are_not_equal_message: .string "Numbers are not equal. Computer number is %d\n"
     format: .string "%d"                    # format string for scanf, specifying integer input
     seed: .long 0
 
@@ -62,22 +61,15 @@ do_main:	                                # the main function:
 
         # divide %rax by 10 to get a number between 0 and 9. this will put a reminder into rdx
         movq $1, %rbx
-        div %rbx
+        div %rbx                            #divide %rax by 10. the reminder wil be stored in %rdx
 
-        #movq %rdx, [computer_number]
+        # movq %rdx, computer_number
 
         cmp %rdx, [user_number]              # compare numbers
         je numbers_are_equal                 # jump to 'numbers_are_equal' label
         jmp numbers_are_not_equal            # jump to 'numbers_are_not equal' label
 
     return_from_print_result:       # continue
-
-        # print generated random number
-        movq $computer_print_format, %rdi   # pass format string to the function
-        #movq %rdx, %rsi                    # pass computer number (%rdx) to the function
-        movq $0, %rax                       # clear rax registry
-        call printf                         # print random value
-
         mov counter, %ecx                   # restore ecx value
         loop start_loop                     # jump to start if loop counter is not zero
 
@@ -96,6 +88,7 @@ do_main:	                                # the main function:
 
  numbers_are_not_equal:
      movq $numbers_are_not_equal_message, %rdi   # pass format string to the function
+     movq %rdx, %rsi
      movq $0, %rax                           # clear rax registry
      call printf                             # print random value
      jmp return_from_print_result
