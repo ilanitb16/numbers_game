@@ -9,4 +9,5 @@ time_t my_time() {
 
 int main() {
     do_main();
+  //  return 0;
 }

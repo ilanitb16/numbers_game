@@ -117,7 +117,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 1,
-			"path" : "game.s",
+			"path" : "main.s",
 			"sourceGroupIndex" : 1
 		}
 	],

@@ -55,8 +55,8 @@ build CMakeFiles/test.dir/main.c.o: C_COMPILER__test_unscanned_Debug /home/oem/P
   OBJECT_DIR = CMakeFiles/test.dir
   OBJECT_FILE_DIR = CMakeFiles/test.dir
 
-build CMakeFiles/test.dir/game.s.o: ASM_COMPILER__test_unscanned_Debug /home/oem/Projects/assemler/test/game.s || cmake_object_order_depends_target_test
-  DEP_FILE = CMakeFiles/test.dir/game.s.o.d
+build CMakeFiles/test.dir/main.s.o: ASM_COMPILER__test_unscanned_Debug /home/oem/Projects/assemler/test/main.s || cmake_object_order_depends_target_test
+  DEP_FILE = CMakeFiles/test.dir/main.s.o.d
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/test.dir
   OBJECT_FILE_DIR = CMakeFiles/test.dir
@@ -69,7 +69,7 @@ build CMakeFiles/test.dir/game.s.o: ASM_COMPILER__test_unscanned_Debug /home/oem
 #############################################
 # Link the executable test
 
-build test: C_EXECUTABLE_LINKER__test_Debug CMakeFiles/test.dir/main.c.o CMakeFiles/test.dir/game.s.o
+build test: C_EXECUTABLE_LINKER__test_Debug CMakeFiles/test.dir/main.c.o CMakeFiles/test.dir/main.s.o
   FLAGS = -no-pie -g
   OBJECT_DIR = CMakeFiles/test.dir
   POST_BUILD = :
