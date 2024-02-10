@@ -6,7 +6,6 @@
     rand_number: .long 0                    # reserve space for the random number
 
 .section .rodata	                        # read only data section
-    quess_print_format: .string "What is your guess? "
     user_print_format:  .string "User number is %d \n"
     seed_print_format:  .string "Seed is: %d\n"
     rand_print_format:  .string "Rand is: %d\n"
@@ -15,9 +14,10 @@
     seed_scan_format:   .string "%d"
     user_scan_format:   .string "%d"
 
-    enter_seed_message: .string "Enter configuration seed: "
-    numbers_are_equal_message: .string "Congratz! You won!\n"
-    numbers_are_not_equal_message: .string "Incorrect.\n"
+    enter_seed_message:             .string "Enter configuration seed: "
+    quess_number_message:           .string "What is your guess? "
+    numbers_are_equal_message:      .string "Congratz! You won!\n"
+    numbers_are_not_equal_message:  .string "Incorrect.\n"
 
 .text	                                    # the beginnig of the code
 .globl	do_main	                            # the label "main" is used to state the initial point of this program
@@ -67,12 +67,12 @@ do_main:	                                # the main function:
     movl [counter], %ecx                    # init loop counter
 
     start_loop:
-        movl    %ecx, counter                  # store %ecx in counter variable
+        movl    %ecx, counter               # store %ecx in counter variable
 
-        # print: Guess a number between 0 and 9
-        movq $quess_print_format, %rdi      # the only paramter passed to the printf - first parameter goes in %rdi
-        xorq %rax, %rax                     # clear rax registry
-        call printf		                    # calling to printf AFTER we passed its parameters.
+        # print: guess a number prompt
+        movq    $quess_number_message, %rdi # the only paramter passed to the printf - first parameter goes in %rdi
+        xorq    %rax, %rax                  # clear rax registry
+        call    printf		                # calling to printf AFTER we passed its parameters.
 
         # get user number
         movq    $user_scan_format, %rdi     # pass scan format string
