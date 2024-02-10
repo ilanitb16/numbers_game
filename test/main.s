@@ -10,14 +10,14 @@
     user_print_format:  .string "User number is %d \n"
     seed_print_format:  .string "Seed is: %d\n"
     rand_print_format:  .string "Rand is: %d\n"
-    enter_seed_print_format: .string "Enter configuration seed: "
+    lost_print_format:  .string "Game over, you lost :(. The correct answer was %d"
 
-    seed_scan_format: .string "%d"
-    user_scan_format: .string "%d"
+    seed_scan_format:   .string "%d"
+    user_scan_format:   .string "%d"
 
+    enter_seed_message: .string "Enter configuration seed: "
     numbers_are_equal_message: .string "Congratz! You won!\n"
     numbers_are_not_equal_message: .string "Incorrect.\n"
-    you_lost_message: .string "Game over, you lost :(. The correct answer was %d"
 
 .text	                                    # the beginnig of the code
 .globl	do_main	                            # the label "main" is used to state the initial point of this program
@@ -28,7 +28,7 @@ do_main:	                                # the main function:
     movq %rsp, %rbp	                        # create the new frame pointer
 
     # print seed prompt
-    movq $enter_seed_print_format, %rdi     # pass format string to the function
+    movq $enter_seed_message, %rdi          # pass format string to the function
     xorq %rax, %rax                         # clear rax registry
     call printf                             # print seed prompt
 
@@ -94,7 +94,7 @@ do_main:	                                # the main function:
         mov [counter], %ecx                 # restore ecx value
         loop start_loop                     # jump to start if loop counter is not zero
 
-    movq $you_lost_message, %rdi            # pass format string to the function
+    movq $lost_print_format, %rdi           # pass format string to the function
     movq rand_number, %rsi                  # pass user number to the function via %rsi
     movq $0, %rax                           # clear rax registry
     call printf
