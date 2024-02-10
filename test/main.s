@@ -2,90 +2,91 @@
 
 .section .data                              # contains initialized data
 	counter: .int 5                         # amount of loops
-    user_number: .int 0                     # reserve space for the user number
-    computer_number: .int 0
-    seed: .int 0
-    random_number: .long 0
+    seed_number: .int 0                     # reserve space for the seed number
+    rand_number: .long 0                    # reserve space for the random number
 
 .section .rodata	                        # read only data section
-    str: .string "What is your guess? "
-    user_print_format: .string "User number is %d \n"
-    time_print_format: .string "Time is: %d\n"
+    quess_print_format: .string "What is your guess? "
+    user_print_format:  .string "User number is %d \n"
+    seed_print_format:  .string "Seed is: %d\n"
+    rand_print_format:  .string "Rand is: %d\n"
+    enter_seed_print_format: .string "Enter configuration seed: "
+
+    seed_scan_format: .string "%d"
+    user_scan_format: .string "%d"
+
     numbers_are_equal_message: .string "Congratz! You won!\n"
     numbers_are_not_equal_message: .string "Incorrect.\n"
     you_lost_message: .string "Game over, you lost :(. The correct answer was %d"
 
-    format: .string "%d"                    # format string for scanf, specifying integer input
-    seed_num: .string "%d"
-    enter_seed_str: .string "Enter configuration seed: "
-
-
 .text	                                    # the beginnig of the code
 .globl	do_main	                            # the label "main" is used to state the initial point of this program
-.type	do_main, @function	                    # the label "main" representing the beginning of a function
+.type	do_main, @function	                # the label "main" representing the beginning of a function
 
-do_main:	                                    # the main function:
+do_main:	                                # the main function:
     pushq %rbp		                        # save the old frame pointer
     movq %rsp, %rbp	                        # create the new frame pointer
 
     # print seed prompt
-    movq $enter_seed_str, %rdi              # pass format string to the function
+    movq $enter_seed_print_format, %rdi     # pass format string to the function
     xorq %rax, %rax                         # clear rax registry
     call printf                             # print seed prompt
 
-    #movq $seed, %rsi
-    #movq $seed_num, %rdi                    # first paramter passed to the scanf is in %rdi
-    #xorq %rax, %rax                         # clear rax registry
-    #call scanf                              # call to scanf after passing its parameters.
+    # get seed number
+    lea     (%rsp), %rsi                    # overrite the option of the switch case
+    movq    $seed_scan_format, %rdi         # load format string
+    xorq    %rax, %rax                      # clear rax registry
+    call    scanf                           # get seed number
+    mov     %rsi, seed_number               # store received value in seed_number variable
 
-    movq    $0, %rax                        #clear rax register
-    lea   (%rsp), %dx                 # overrite the option of the switch case
-    movq    $seed_num, %rdi             # load format string
-    call    scanf                       #pass the pointer address of stack (%rsp) = address of i. (to scanf)
-    #mov    (%rsp), %dx                     #pass i from stack to pstrijcpy
+    # print seed
+    movq    $seed_print_format, %rdi
+    mov     seed_number, %rsi
+    xorq    %rax, %rax
+    call    printf
 
-    xorq %rax, %rax                         # clear rax registry
-    mov %dx, %si                       # pass seed to the function
-    call srand                              # initialize the random number generator with a seed value.
+    # init rand generator
+    xorq    %rax, %rax                      # clear rax registry
+    mov     seed_number, %rdi               # pass seed number to srand function
+    call    srand                           # initialize the random number generator with a seed value.
 
     # generate a random number
-    call rand                               # Call the rand function, the result stored in %rax
+    call    rand                            # call the rand function, the result stored in %rax
 
     # divide %rax by 11 to get a number between 0 and 10. this will put a reminder into rdx
-    movq $11, %rbx
-    div %rbx
-    mov %rdx, random_number                 # store reminder in random_number variable
+    movq    $11, %rbx
+    div     %rbx                            # divide %rax by 11 (stored in %rbx)
+    mov     %rdx, rand_number               # store reminder in random_number variable
 
-    movl [counter], %ecx                     # loop counter
+    # print seed
+    movq    $rand_print_format, %rdi
+    mov     rand_number, %rsi
+    xorq    %rax, %rax
+    call    printf
+
+    movl [counter], %ecx                    # init loop counter
 
     start_loop:
-        movl %ecx, counter                   # store %ecx in counter variable
+        movl    %ecx, counter                  # store %ecx in counter variable
 
         # print: Guess a number between 0 and 9
-        movq $str, %rdi     # the string is the only paramter passed to the printf function-first parameter goes in %rdi
-        xorq %rax, %rax
-        call	printf		                # calling to printf AFTER we passed its parameters.
+        movq $quess_print_format, %rdi      # the only paramter passed to the printf - first parameter goes in %rdi
+        xorq %rax, %rax                     # clear rax registry
+        call printf		                    # calling to printf AFTER we passed its parameters.
 
-        # prepare the arguments and call scanf to get user number
-        #movq $user_number, %rsi             # pass input addres string to scanf
-        #movq $format, %rdi                  # pass format string to scanf
-        #call scanf                          # Call scanf to read an integer from the console
-
-        movq    $0, %rax                        #clear rax register
-        lea   (%rsp), %rsi                 #
-        movq    $format, %rdi             # load format string
-        call    scanf                       #pass the pointer address of stack (%rsp) = address of i. (to scanf)
-        #mov    (%rsp), user_number                     #pass i from stack to pstrijcpy
-
+        # get user number
+        movq    $user_scan_format, %rdi     # pass scan format string
+        lea     (%rsp), %rsi                # store user number in %rsi
+        xorq    %rax, %rax                  # clear rax register
+        call    scanf                       # get user number
 
         # print user number
-        #movq $user_print_format, %rdi       # pass format string to the function
-        #movq [user_number], %rsi            # pass user number to the function via %rsi
-        #movq $0, %rax                       # clear rax registry
-        #call printf                         # print user number
+        movq    $user_print_format, %rdi    # pass format string to the function
+        xorq    %rax, %rax                  # clear rax registry
+        call    printf                      # print user number
 
-        movl random_number, %edx
-        cmp (%rsp), %edx            # compare numbers
+        movl rand_number, %edx              # store random number in %edx
+        cmp (%rsp), %edx                    # compare numbers
         je numbers_are_equal                # jump to 'numbers_are_equal' label
         jmp numbers_are_not_equal           # jump to 'numbers_are_not equal' label
 
@@ -94,7 +95,7 @@ do_main:	                                    # the main function:
         loop start_loop                     # jump to start if loop counter is not zero
 
     movq $you_lost_message, %rdi            # pass format string to the function
-    movq random_number, %rsi                # pass user number to the function via %rsi
+    movq rand_number, %rsi                  # pass user number to the function via %rsi
     movq $0, %rax                           # clear rax registry
     call printf
 
