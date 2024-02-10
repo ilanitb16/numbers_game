@@ -40,10 +40,10 @@ main:	                                    # the main function:
     mov     %rsi, seed_number               # store received value in seed_number variable
 
     # print seed
-    movq    $seed_print_format, %rdi
-    mov     seed_number, %rsi
-    xorq    %rax, %rax
-    call    printf
+    #movq    $seed_print_format, %rdi
+    #mov     seed_number, %rsi
+    #xorq    %rax, %rax
+    #call    printf
 
     # init rand generator
     xorq    %rax, %rax                      # clear rax registry
@@ -54,15 +54,15 @@ main:	                                    # the main function:
     call    rand                            # call the rand function, the result stored in %rax
 
     # divide %rax by 11 to get a number between 0 and 10. this will put a reminder into rdx
-    movq    $11, %rbx
+    movq    $10, %rbx
     div     %rbx                            # divide %rax by 11 (stored in %rbx)
     mov     %rdx, rand_number               # store reminder in random_number variable
 
     # print random number
-    movq    $rand_print_format, %rdi
-    mov     rand_number, %rsi
-    xorq    %rax, %rax
-    call    printf
+    #movq    $rand_print_format, %rdi
+    #mov     rand_number, %rsi
+    #xorq    %rax, %rax
+    #call    printf
 
     movl counter, %ecx                    # init loop counter
 
@@ -81,9 +81,9 @@ main:	                                    # the main function:
         call    scanf                       # get user number
 
         # print user number
-        movq    $user_print_format, %rdi    # pass format string to the function
-        xorq    %rax, %rax                  # clear rax registry
-        call    printf                      # print user number
+        #movq    $user_print_format, %rdi    # pass format string to the function
+        #xorq    %rax, %rax                  # clear rax registry
+        #call    printf                      # print user number
 
         movl rand_number, %edx              # store random number in %edx
         cmp (%rsp), %edx                    # compare numbers
