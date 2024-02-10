@@ -20,10 +20,10 @@
     numbers_are_not_equal_message:  .string "Incorrect.\n"
 
 .text	                                    # the beginnig of the code
-.globl	do_main	                            # the label "main" is used to state the initial point of this program
-.type	do_main, @function	                # the label "main" representing the beginning of a function
+.globl	main	                            # the label "main" is used to state the initial point of this program
+.type	main, @function	                    # the label "main" representing the beginning of a function
 
-do_main:	                                # the main function:
+main:	                                    # the main function:
     pushq %rbp		                        # save the old frame pointer
     movq %rsp, %rbp	                        # create the new frame pointer
 
@@ -58,13 +58,13 @@ do_main:	                                # the main function:
     div     %rbx                            # divide %rax by 11 (stored in %rbx)
     mov     %rdx, rand_number               # store reminder in random_number variable
 
-    # print seed
+    # print random number
     movq    $rand_print_format, %rdi
     mov     rand_number, %rsi
     xorq    %rax, %rax
     call    printf
 
-    movl [counter], %ecx                    # init loop counter
+    movl counter, %ecx                    # init loop counter
 
     start_loop:
         movl    %ecx, counter               # store %ecx in counter variable
@@ -91,15 +91,15 @@ do_main:	                                # the main function:
         jmp numbers_are_not_equal           # jump to 'numbers_are_not equal' label
 
     return_from_print_result:               # continue
-        mov [counter], %ecx                 # restore ecx value
+        movl counter, %ecx                  # restore ecx value
         loop start_loop                     # jump to start if loop counter is not zero
 
     movq $lost_print_format, %rdi           # pass format string to the function
     movq rand_number, %rsi                  # pass user number to the function via %rsi
-    movq $0, %rax                           # clear rax registry
+    xorq %rax, %rax                         # clear rax registry
     call printf
 
-exit:
+exit_program:
     xorq	%rax, %rax	                    # return value is zero (just like in c - we tell the OS that this program finished seccessfully)
     movq	%rbp, %rsp	                    # restore the old stack pointer - release all used memory.
     popq	%rbp		                    # restore old frame pointer (the caller function frame)
@@ -109,7 +109,7 @@ exit:
     movq $numbers_are_equal_message, %rdi   # pass format string to the function
     movq $0, %rax                           # clear rax registry
     call printf                             # print random value
-    jmp exit
+    jmp exit_program
 
  numbers_are_not_equal:
      movq $numbers_are_not_equal_message, %rdi   # pass format string to the function
