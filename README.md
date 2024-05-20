@@ -14,7 +14,7 @@ This repository contains an implementation of a simple number guessing game usin
 
 ### Output Examples
 
-![image](https://github.com/ilanitb16/numbers_game/assets/97344492/b6573512-6fa3-41f9-91b3-ea25e76ef292)
+![image](https://github.com/ilanitb16/numbers_game/assets/97344492/0cd00baf-d349-4772-8bb0-0ff165ac15d8)
 
 ## Game Mechanics
 
